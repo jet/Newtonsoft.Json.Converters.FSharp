@@ -25,3 +25,10 @@ module internal JsonSerializerExtensions =
             )
             JsonSerializer.Deserialize<'T>(bufferWriter.WrittenSpan, defaultArg options null)
 #endif
+
+        static member DeserializeElement(element : JsonElement, t : Type, [<Optional; DefaultParameterValue(null)>] ?options: JsonSerializerOptions) =
+#if NETSTANDARD2_0
+            JsonSerializer.Deserialize(write element, t, defaultArg options null)
+#else
+            JsonSerializer.Deserialize(element.GetRawText(), t, defaultArg options null)
+#endif
